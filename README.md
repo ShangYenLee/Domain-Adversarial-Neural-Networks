@@ -17,5 +17,5 @@ DANN has two main objectives, the first one is to accurately predict the classif
 </p>
 
 <p align="center">
-(a) latent space by class &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;(b) latent space by domain
+(a) latent space by class &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;(b) latent space by domain
 </p>
