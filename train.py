@@ -37,7 +37,7 @@ def train(opt):
 	device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
 
     #model
-	model = CNNModel(opt)
+	model = CNNModel()
 	model = model.to(device)
 	criterion = nn.CrossEntropyLoss()
 	optimizer = torch.optim.AdamW(model.parameters(), lr=opt.lr)
