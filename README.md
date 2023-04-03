@@ -1,6 +1,10 @@
 # Domain-Adversarial-Neural-Networks
 DANN has two main objectives, the first one is to accurately predict the classification label of the input image in the target domain. The second one is to reduce the difference between the source and target domain.
 
+## Training
+## Download checkpoint
+## Inference
+## Result
 ||MNIST-M → SVHN|MNIST-M → USPS|
 |:---:|:---:|:---:|
 |Trained on source|0.33940|0.73522|
@@ -17,5 +21,5 @@ DANN has two main objectives, the first one is to accurately predict the classif
 </p>
 
 <p align="center">
-(a) latent space by class &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;(b) latent space by domain
+(a) latent space by class &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;(b) latent space by domain
 </p>
