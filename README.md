@@ -28,7 +28,7 @@ bash download.sh
 python inference.py --checkpoint $checkpoint_dir --test_loc $test_folder --out_path $output_dir
 ```
 ```
-bash inference.sh
+bash inference.sh $test_folder $output_dir
 ```
 ## Result
 <div align="center">
