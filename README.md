@@ -19,7 +19,17 @@ python train.py --data_root $data_dir --train_mode sorce --target_file svhn/usps
 python train.py --data_root $data_dir --train_mode target --target_file svhn/usps
 ```
 ## Download checkpoint
-## Inference
+[checkpoint link](https://drive.google.com/drive/folders/1kUAP0tcsRnJz4vyVp5khdVVdd2N_yqIG?usp=sharing)
+```
+bash download.sh
+```
+## Inference DANN
+```
+python inference.py --checkpoint $checkpoint_dir --test_loc $test_folder --out_path $output_dir
+```
+```
+bash inference.sh
+```
 ## Result
 <div align="center">
 
