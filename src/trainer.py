@@ -59,6 +59,7 @@ def train_step(model, train_loader, constant, device):
             'Loss': loss.item(), 'Acc': acc.item()
         }) 
     train_bar.close()
+    return 0
 
 def val_step(model, val_loader, constant, device):
     model.eval()
