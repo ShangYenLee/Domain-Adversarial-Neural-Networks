@@ -20,6 +20,7 @@ class ReverseLayerF(Function):
 class CNNModel(nn.Module):
     def __init__(self, opt):
         super(CNNModel, self).__init__()
+        self.size = opt.size
         self.feature = nn.Sequential(
             nn.Conv2d(opt.in_channels, 64, kernel_size=5),
             nn.BatchNorm2d(64),
@@ -49,7 +50,7 @@ class CNNModel(nn.Module):
         self.domain_classifier.add_module('d_fc2', nn.Linear(100, 2))
 
     def forward(self, input_data, alpha):
-        input_data = input_data.expand(input_data.data.shape[0], 3, opt.size, opt.size)
+        input_data = input_data.expand(input_data.data.shape[0], 3, self.size, self.size)
         feature = self.feature(input_data)
         feature = feature.view(-1, 50 * 4 * 4)
         reverse_feature = ReverseLayerF.apply(feature, alpha)

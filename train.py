@@ -8,7 +8,7 @@ from datetime import datetime
 from torch.utils.data import DataLoader
 from torch.optim import lr_scheduler
 from src.dataset import get_digits_dataset
-from src.trainer import dann_train_step
+from src.trainer import dann_train_step, train_step, val_step
 from src.dann import *
 from src.utils import save_topk_ckpt
 
@@ -31,10 +31,8 @@ opt = parser.parse_args()
 
 def train(opt):
 	# initial setting
-	ckpt_loc = os.path.join(opt.save_dir,f'{datetime.today().strftime("%m-%d-%H-%M-%S")}_{opt.train_mode}_{opt.target_file}')
-	mod_loc = os.path.join(ckpt_loc,'model')
+	ckpt_loc = os.path.join(opt.save_dir,f'{opt.train_mode}_{opt.target_file}_{datetime.today().strftime("%m-%d-%H-%M-%S")}')
 	os.makedirs(ckpt_loc,exist_ok=True)
-	os.makedirs(mod_loc,exist_ok=True)
 	torch.manual_seed(1)
 	device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
 
@@ -49,34 +47,38 @@ def train(opt):
 	mnistm_train = get_digits_dataset(opt, 'mnistm', 'train')
 	target_train = get_digits_dataset(opt, opt.target_file, 'train')
 	target_val = get_digits_dataset(opt, opt.target_file,'val')
-    mnistm_loader = DataLoader(
-        mnistm_train,
-        batch_size=opt.bs,
-        num_workers=opt.num_workers,
-        shuffle=True
-    )
-    target_loader = DataLoader(
-        target_train,
-        batch_size=opt.bs,
-        num_workers=opt.num_workers,
-        shuffle=True
-    )
-    target_val_loader = DataLoader(
-        target_val,
-        batch_size=1,
-        num_workers=opt.num_workers,
-        shuffle=True
-    )
+	mnistm_loader = DataLoader(
+		mnistm_train,
+		batch_size=opt.bs,
+		num_workers=opt.num_workers,
+		shuffle=True
+	)
+	target_loader = DataLoader(
+		target_train,
+		batch_size=opt.bs,
+		num_workers=opt.num_workers,
+		shuffle=True
+	)
+	target_val_loader = DataLoader(
+		target_val,
+		batch_size=1,
+		num_workers=opt.num_workers,
+		shuffle=True
+	)
+	if opt.train_mode == 'sorce':
+		train_loader = mnistm_loader
+	else:
+		train_loader = target_loader
 	for epoch in range(1, opt.ep+1):
 		if opt.train_mode == 'dann':
-			constant = dann_train_step(opt, model, mnistm_loader, target_loader, criterion, optimizer, device)
+			constant = dann_train_step(epoch, opt, model, mnistm_loader, target_loader, criterion, optimizer, device)
 		else:
 			# train on sorce or target only
-			constant = train_step(model, train_loader, 0, device)
+			constant = train_step(epoch, model, train_loader, criterion, optimizer, 0, device)
 		if epoch % opt.val_period == 0:
-			val_step(model, target_val_loader, constant, device)
-			save_topk_ckpt(model,ckpt_loc,f'ep{epoch:0>3}_{opt.target_file}_acc={acc.item():.5f}.pt',opt.topk+1)
+			acc = val_step(model, target_val_loader, constant, device)
+			save_topk_ckpt(model,ckpt_loc,f'{opt.target_file}_ep{epoch:0>3}_acc={acc.item():.5f}.pt',opt.topk+1)
 		scheduler.step()
 
 if __name__ == '__main__':
-    train(opt)
+	train(opt)

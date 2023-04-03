@@ -2,7 +2,6 @@ import os
 import glob
 import torch
 import torchvision
-from src.models import *
 from PIL import Image
 import numpy as np
 
