@@ -2,6 +2,22 @@
 DANN has two main objectives, the first one is to accurately predict the classification label of the input image in the target domain. The second one is to reduce the difference between the source and target domain.
 
 ## Training
+* train DANN for target domain 'SVHN'
+```
+python train.py --data_root $data_dir --train_mode dann --target_file svhn
+```
+* train DANN for target domain 'USPS'
+```
+python train.py --data_root $data_dir --train_mode dann --target_file usps
+```
+* trained on sorce
+```
+python train.py --data_root $data_dir --train_mode sorce --target_file svhn/usps
+```
+* trained on target
+```
+python train.py --data_root $data_dir --train_mode target --target_file svhn/usps
+```
 ## Download checkpoint
 ## Inference
 ## Result
